@@ -8,8 +8,7 @@ spec:
   ports:
   - port: 80 #change to 80
     protocol: TCP
-    targetPort: 80 #change to 80
-    nodePort: 30333
+    targetPort: 80
   selector:
     app: solar-system
-  type: NodePort
+  type: LoadBalancer
