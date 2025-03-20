@@ -1,6 +1,6 @@
 job('job1-deploy-webserver') {
     description ('First K8S job on Jenkins')
     step {
-        groovy Jenkinsfile
+           kubectl apply -f test1.yml
          }
     }
