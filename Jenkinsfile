@@ -1,23 +1,39 @@
-/*stage("Git clone" {
-    get credentialsID: 'GIT_HUB_CREDENTIAL', url: "https://github.com/shfy70/k8s.git"
-}
-*/
+pipeline 
+ {
+           agent {label 'main'}
+  stages {
+   
+           stage('checkout')
+     		  {
+                 steps {
+                          echo "----Now I will try to dpeloy Lunar system----"  
+                       }
+              }
+          stage('build')
+         	  {
+      
+                   environment {
+                                JOB_NAME = "${env.JOB_NAME}"
+                               }
+                   steps  {
+                                timestamps() 
+				                     {
+										sh "pwd"
+										sh "whoami"
+										echo "current job name : Lunar system"
 
-/*
-podTemplate {
-    node(POD_LABEL) {
-        stage('Run shell') {
-            sh 'echo fuck Biden'
-        }
-    }
-}
-*/
+										pwsh """ kubectl  apply -f ./jenkins/blob/main/mydeploy.yaml """ 
+                                               
+                                        pwsh """ kubectl  apply -f ./jenkins/blob/main/myservice.yaml """
+              
+                                     }
+                          }           
+              }
+         }
 
-node {
-  stage('Apply Kubernetes files') {
-    withKubeConfig([credentialsId: 'user1', serverUrl: 'https://api.k8s.my-company.com']) {
-      sh 'kubectl apply -f my-kubernetes-directory'
-    }
-  }
-}
-
+	post {
+		failure {
+					echo "Execution failed unfortunately"							
+				}
+		}      
+ }
